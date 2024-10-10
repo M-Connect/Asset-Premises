@@ -59,7 +59,7 @@ export function toUILease(tenant: TenantAPI.TenantDataType): Lease {
     rent: tenant.lease.rent,
     remainingIterations: tenant.lease.remainingIterations,
     remainingIterationsToPay: tenant.lease.remainingIterationsToPay,
-    properties: tenant.lease.properties.map((property) => ({
+    properties: tenant.lease.properties.map((property: { id: string; name: string; description: string; type: string }) => ({
       id: property.id,
       name: property.name,
       description: property.description,
@@ -67,7 +67,7 @@ export function toUILease(tenant: TenantAPI.TenantDataType): Lease {
     })),
     balance: tenant.lease.balance,
     deposit: tenant.lease.deposit,
-    invoices: tenant.lease.invoices.map((invoice) => ({
+    invoices: tenant.lease.invoices.map((invoice: { term: number; grandTotal: number; payment: number; status: string; methods: string[] }) => ({
       id: String(invoice.term),
       term: invoice.term,
       grandTotal: invoice.grandTotal,
