@@ -175,6 +175,10 @@ function Property() {
     [store, t, router]
   );
 
+  const onAccessWarranties = useCallback(() => {
+    router.push(`/properties/${store.property.selected._id}/warranties`);
+  }, [router, store.property.selected._id]);
+
   return (
     <Page
       loading={fetching}
@@ -191,6 +195,12 @@ function Property() {
             onClick={onConfirmDeleteProperty}
             className="col-start-2 col-end-2"
             dataCy="removeResourceButton"
+          />
+          <ShortcutButton
+            label={t('Access Warranties')}
+            Icon={KeyRoundIcon}
+            onClick={onAccessWarranties}
+            className="col-start-3 col-end-3"
           />
         </div>
       }
