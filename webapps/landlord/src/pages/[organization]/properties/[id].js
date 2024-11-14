@@ -24,6 +24,7 @@ import useFillStore from '../../../hooks/useFillStore';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { withAuthentication } from '../../../components/Authentication';
+import PropertyWarrantiesForm from '../../../components/properties/PropertyWarrantiesForm';
 
 function PropertyOverviewCard() {
   const { t } = useTranslation('common');
@@ -100,6 +101,7 @@ function Property() {
   const [openConfirmDeletePropertyDialog, setOpenConfirmDeletePropertyDialog] =
     useState(false);
   const [fetching] = useFillStore(fetchData, [router]);
+  const [showWarranties, setShowWarranties] = useState(false);
 
   const handleBack = useCallback(() => {
     router.push(store.appHistory.previousPath);
@@ -176,8 +178,8 @@ function Property() {
   );
 
   const onAccessWarranties = useCallback(() => {
-    router.push(`/properties/${store.property.selected._id}/warranties`);
-  }, [router, store.property.selected._id]);
+    setShowWarranties(true);
+  }, []);
 
   return (
     <Page
@@ -208,19 +210,35 @@ function Property() {
     >
       <>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="md:col-span-2">
-            <Tabs
-              variant="scrollable"
-              value={tabSelectedIndex}
-              onChange={handleTabChange}
-              aria-label="Property tabs"
-            >
-              <Tab label={t('Property')} wrapped />
-            </Tabs>
-            <TabPanel value={tabSelectedIndex} index={0}>
-              <PropertyForm onSubmit={onSubmit} />
-            </TabPanel>
-          </Card>
+          {showWarranties ? (
+            <Card className="md:col-span-2">
+              <Tabs
+                variant="scrollable"
+                value={tabSelectedIndex}
+                onChange={handleTabChange}
+                aria-label="Property tabs"
+              >
+                <Tab label={t('Property Warranties')} wrapped />
+              </Tabs>
+              <TabPanel value={tabSelectedIndex} index={0}>
+                <PropertyWarrantiesForm />
+              </TabPanel>
+            </Card>
+          ) : (
+            <Card className="md:col-span-2">
+              <Tabs
+                variant="scrollable"
+                value={tabSelectedIndex}
+                onChange={handleTabChange}
+                aria-label="Property tabs"
+              >
+                <Tab label={t('Property')} wrapped />
+              </Tabs>
+              <TabPanel value={tabSelectedIndex} index={0}>
+                <PropertyForm onSubmit={onSubmit} />
+              </TabPanel>
+            </Card>
+          )}
 
           <div className="hidden md:grid grid-cols-1 gap-4 h-fit">
             <PropertyOverviewCard />
