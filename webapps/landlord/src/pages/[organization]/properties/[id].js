@@ -16,6 +16,7 @@ import NumberFormat from '../../../components/NumberFormat';
 import { observer } from 'mobx-react-lite';
 import Page from '../../../components/Page';
 import PropertyForm from '../../../components/properties/PropertyForm';
+import PropertyWarrantiesForm from '../../../components/properties/PropertyWarrantiesForm';
 import ShortcutButton from '../../../components/ShortcutButton';
 import { StoreContext } from '../../../store';
 import { toast } from 'sonner';
@@ -24,7 +25,6 @@ import useFillStore from '../../../hooks/useFillStore';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { withAuthentication } from '../../../components/Authentication';
-import PropertyWarrantiesForm from '../../../components/properties/PropertyWarrantiesForm';
 
 function PropertyOverviewCard() {
   const { t } = useTranslation('common');
@@ -177,6 +177,41 @@ function Property() {
     [store, t, router]
   );
 
+  const onSubmitWarranties = useCallback(
+    async (warrantyData) => {
+      try {
+        const property = toJS(store.property.selected);
+        const updatedWarranties = property.warranties || [];
+        const warrantyIndex = updatedWarranties.findIndex(
+          (warranty) => warranty._id === warrantyData._id
+        );
+
+        if (warrantyIndex > -1) {
+          // Update existing warranty
+          updatedWarranties[warrantyIndex] = warrantyData;
+        } else {
+          // Add new warranty
+          updatedWarranties.push(warrantyData);
+        }
+
+        const response = await store.property.update({
+          ...property,
+          warranties: updatedWarranties
+        });
+
+        if (response.status === 200) {
+          toast.success(t('Warranty added/updated successfully'));
+          store.property.setSelected(response.data);
+        } else {
+          toast.error(t('Failed to add/update warranty'));
+        }
+      } catch (error) {
+        toast.error(t('An error occurred while adding/updating the warranty'));
+      }
+    },
+    [store, t]
+  );
+
   const onAccessWarranties = useCallback(() => {
     setShowWarranties(true);
   }, []);
@@ -221,7 +256,7 @@ function Property() {
                 <Tab label={t('Property Warranties')} wrapped />
               </Tabs>
               <TabPanel value={tabSelectedIndex} index={0}>
-                <PropertyWarrantiesForm />
+                <PropertyWarrantiesForm onSubmit={onSubmitWarranties} />
               </TabPanel>
             </Card>
           ) : (

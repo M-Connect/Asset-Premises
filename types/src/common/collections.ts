@@ -131,6 +131,42 @@ export namespace CollectionTypes {
     stepperMode: boolean;
   };
 
+ export type Warranty = {
+    name: string;
+    provider: string;
+    expirationDate: Date;
+    coverageScope: {
+      coveredItems: string;
+      typesOfDefects: string;
+    };
+    warrantyDuration: {
+      timeFrame: string;
+      startDate: Date;
+    };
+    exclusionsAndLimitations: {
+      excludedItems: string;
+      usageConditions: string;
+    };
+    claimProcedures: {
+      process: string;
+      authorizedServiceCenters: string;
+    };
+    consumerResponsibilities: {
+      maintenanceRequirements: string;
+      properUse: string;
+    };
+    remediesProvided: {
+      repairOrReplacement: string;
+      costCoverage: string;
+    };
+    transferability: {
+      ownershipChanges: string;
+    };
+    legalRights: {
+      stateLaws: string;
+    };
+  } 
+
   export type Property = {
     _id: string;
     realmId: string;
@@ -142,6 +178,7 @@ export namespace CollectionTypes {
     digicode: string;
     address: CollectionTypes.PartAddress;
     price: number;
+    warranties?: Warranty[]; // Include the Warranty type
 
     // TODO to remove, replaced by address
     building: string;

@@ -1,6 +1,7 @@
 import { CollectionTypes } from '@microrealestate/types';
 import mongoose from 'mongoose';
 import Realm from './realm.js';
+import WarrantySchema from './warranty.js';
 
 const PropertySchema = new mongoose.Schema<CollectionTypes.Property>({
   realmId: { type: String, ref: Realm },
@@ -21,8 +22,10 @@ const PropertySchema = new mongoose.Schema<CollectionTypes.Property>({
     country: String
   },
 
-  price: Number
+  price: Number,
+  warranties: [WarrantySchema] // Embed the Warranty schema
 });
+
 export default mongoose.model<CollectionTypes.Property>(
   'Property',
   PropertySchema
