@@ -16,7 +16,6 @@ import NumberFormat from '../../../components/NumberFormat';
 import { observer } from 'mobx-react-lite';
 import Page from '../../../components/Page';
 import PropertyForm from '../../../components/properties/PropertyForm';
-import PropertyWarrantiesForm from '../../../components/properties/warranties/PropertyWarrantiesForm';
 import ShortcutButton from '../../../components/ShortcutButton';
 import { StoreContext } from '../../../store';
 import { toast } from 'sonner';
@@ -25,6 +24,7 @@ import useFillStore from '../../../hooks/useFillStore';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { withAuthentication } from '../../../components/Authentication';
+import WarrantyList from '../../../components/properties/warranties/WarrantyList';
 
 function PropertyOverviewCard() {
   const { t } = useTranslation('common');
@@ -101,7 +101,7 @@ function Property() {
   const [openConfirmDeletePropertyDialog, setOpenConfirmDeletePropertyDialog] =
     useState(false);
   const [fetching] = useFillStore(fetchData, [router]);
-  const [showWarranties, setShowWarranties] = useState(false);
+  const [showWarrantyList, setShowWarrantyList] = useState(false);
 
   const handleBack = useCallback(() => {
     router.push(store.appHistory.previousPath);
@@ -177,43 +177,9 @@ function Property() {
     [store, t, router]
   );
 
-  const onSubmitWarranties = useCallback(
-    async (warrantyData) => {
-      try {
-        const property = toJS(store.property.selected);
-        const updatedWarranties = property.warranties || [];
-        const warrantyIndex = updatedWarranties.findIndex(
-          (warranty) => warranty._id === warrantyData._id
-        );
-
-        if (warrantyIndex > -1) {
-          // Update existing warranty
-          updatedWarranties[warrantyIndex] = warrantyData;
-        } else {
-          // Add new warranty
-          updatedWarranties.push(warrantyData);
-        }
-
-        const response = await store.property.update({
-          ...property,
-          warranties: updatedWarranties
-        });
-
-        if (response.status === 200) {
-          toast.success(t('Warranty added/updated successfully'));
-          store.property.setSelected(response.data);
-        } else {
-          toast.error(t('Failed to add/update warranty'));
-        }
-      } catch (error) {
-        toast.error(t('An error occurred while adding/updating the warranty'));
-      }
-    },
-    [store, t]
-  );
 
   const onAccessWarranties = useCallback(() => {
-    setShowWarranties(true);
+    setShowWarrantyList(true);
   }, []);
 
   return (
@@ -245,19 +211,9 @@ function Property() {
     >
       <>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {showWarranties ? (
+          {showWarrantyList ? (
             <Card className="md:col-span-2">
-              <Tabs
-                variant="scrollable"
-                value={tabSelectedIndex}
-                onChange={handleTabChange}
-                aria-label="Property tabs"
-              >
-                <Tab label={t('Property Warranties')} wrapped />
-              </Tabs>
-              <TabPanel value={tabSelectedIndex} index={0}>
-                <PropertyWarrantiesForm onSubmit={onSubmitWarranties} />
-              </TabPanel>
+              <WarrantyList data={store.property.selected.warranties} />
             </Card>
           ) : (
             <Card className="md:col-span-2">
