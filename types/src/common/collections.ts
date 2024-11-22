@@ -178,7 +178,7 @@ export namespace CollectionTypes {
     digicode: string;
     address: CollectionTypes.PartAddress;
     price: number;
-    warranties?: Warranty[]; // Include the Warranty type
+    warranties: CollectionTypes.Warranty[];
 
     // TODO to remove, replaced by address
     building: string;
@@ -303,3 +303,15 @@ export namespace CollectionTypes {
     stepperMode: boolean;
   };
 }
+export type Warranty = {
+  name: string;
+  provider: string;
+  coverageScope: {
+    coveredItems: string;
+    typesOfDefects: string;
+  };
+  warrantyDuration: {
+    startDate: Date;
+    expirationDate: Date;
+  };
+};

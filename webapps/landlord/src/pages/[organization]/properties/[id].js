@@ -16,7 +16,7 @@ import NumberFormat from '../../../components/NumberFormat';
 import { observer } from 'mobx-react-lite';
 import Page from '../../../components/Page';
 import PropertyForm from '../../../components/properties/PropertyForm';
-import PropertyWarrantiesForm from '../../../components/properties/PropertyWarrantiesForm';
+import PropertyWarrantiesForm from '../../../components/properties/warranties/PropertyWarrantiesForm';
 import ShortcutButton from '../../../components/ShortcutButton';
 import { StoreContext } from '../../../store';
 import { toast } from 'sonner';
