@@ -25,6 +25,8 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { withAuthentication } from '../../../components/Authentication';
 import WarrantyList from '../../../components/properties/warranties/WarrantyList';
+import { set } from 'lodash';
+import PropertyWarrantiesForm from '../../../components/properties/warranties/PropertyWarrantiesForm';
 
 function PropertyOverviewCard() {
   const { t } = useTranslation('common');
@@ -101,7 +103,8 @@ function Property() {
   const [openConfirmDeletePropertyDialog, setOpenConfirmDeletePropertyDialog] =
     useState(false);
   const [fetching] = useFillStore(fetchData, [router]);
-  const [showWarrantyList, setShowWarrantyList] = useState(false);
+  const [showWarrantyList, setShowWarrantyList, ] = useState(false);
+  const [showCreateWarranty, setShowCreateWarranty] = useState(false);
 
   const handleBack = useCallback(() => {
     router.push(store.appHistory.previousPath);
@@ -181,7 +184,29 @@ function Property() {
   const onAccessWarranties = useCallback(() => {
     setShowWarrantyList(true);
   }, []);
+  
+  const onCreateWarranty = useCallback(() => {
+    setShowCreateWarranty(true);
+  }, []);
 
+  function WarrantyAccessCard() {
+    return (
+      <DashboardCard
+        Icon={KeyRoundIcon}
+        title={t('Warranties')}
+        renderContent={() => (
+          <div className="text-base">
+            <button
+              className="btn btn-primary"
+              onClick={onCreateWarranty}
+            >
+              {t('Create Warranties')}
+            </button>
+          </div>
+        )}
+      />
+    );
+  }
   return (
     <Page
       loading={fetching}
@@ -211,7 +236,22 @@ function Property() {
     >
       <>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {showWarrantyList ? (
+          {showCreateWarranty ? (
+            <Card className="md:col-span-2">
+              <Tabs
+                variant="scrollable"
+                value={tabSelectedIndex}
+                onChange={handleTabChange}
+                aria-label="Create warranty tabs"
+              >
+                <Tab label={t('Create Warranty')} wrapped />
+              </Tabs>
+              <TabPanel value={tabSelectedIndex} index={0}>
+                <PropertyWarrantiesForm onSubmit={onSubmit} />
+              </TabPanel>
+            </Card>
+            
+          ) : showWarrantyList ? (
             <Card className="md:col-span-2">
               <WarrantyList data={store.property.selected.warranties} />
             </Card>
@@ -234,6 +274,7 @@ function Property() {
           <div className="hidden md:grid grid-cols-1 gap-4 h-fit">
             <PropertyOverviewCard />
             <OccupancyHistoryCard />
+            {showWarrantyList && < WarrantyAccessCard />}
           </div>
         </div>
 
