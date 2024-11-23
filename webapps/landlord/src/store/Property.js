@@ -1,5 +1,4 @@
 import { action, computed, flow, makeObservable, observable } from 'mobx';
-
 import { apiFetcher } from '../utils/fetch';
 import { updateItems } from './utils';
 
@@ -129,6 +128,41 @@ export default class Property {
     try {
       yield apiFetcher().delete(`/properties/${ids.join(',')}`);
       return { status: 200 };
+    } catch (error) {
+      return { status: error?.response?.status };
+    }
+  }
+
+async createWarranty(warrantyData) {
+    try {
+      const response = await apiFetcher().post('/warranties', warrantyData);
+      const createdWarranty = response.data;
+      this.items = updateItems(createdWarranty, this.items);
+      return { status: 200, data: createdWarranty };
+    } catch (error) {
+      return { status: error?.response?.status };
+    }
+  }
+
+  async updateWarranty(warrantyData) {
+    try {
+      const response = await apiFetcher().patch(
+        `/warranties/${warrantyData._id}`,
+        warrantyData
+      );
+      const updatedWarranty = response.data;
+      this.items = updateItems(updatedWarranty, this.items);
+      return { status: 200, data: updatedWarranty };
+    } catch (error) {
+      return { status: error?.response?.status };
+    }
+  }
+
+  async deleteWarranty(warrantyId) {
+    try {
+      const response = await apiFetcher().delete(`/warranties/${warrantyId}`);
+      this.items = this.items.filter((item) => item._id !== warrantyId);
+      return { status: 200, data: response.data };
     } catch (error) {
       return { status: error?.response?.status };
     }

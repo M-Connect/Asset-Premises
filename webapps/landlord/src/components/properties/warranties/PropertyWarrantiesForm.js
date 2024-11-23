@@ -34,16 +34,21 @@ const PropertyWarrantiesForm = observer(({ onSubmit }) => {
       typesOfDefects: '',
     },
     warrantyDuration: {
-      startDate: '',
-      expirationDate: '',
+      startDate: new Date,
+      expirationDate: new Date(),
     },
+  };
+
+  const handleSubmit = (values, actions) => {
+    console.log('Form values:', values);
+    onSubmit(values, actions);
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
     >
       {({ isSubmitting }) => (
         <Form autoComplete="off">

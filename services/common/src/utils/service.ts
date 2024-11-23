@@ -108,6 +108,36 @@ export default class Service {
       }
     }
 
+    // Add the /api/v2/warranties endpoint
+    this.expressServer.post('/api/v2/warranties', (req, res) => {
+      const warrantyData = req.body;
+      // Handle the warranty data and save it to the database
+      // For example:
+      // const createdWarranty = saveWarrantyToDatabase(warrantyData);
+      const createdWarranty = { id: 1, ...warrantyData }; // Mock response
+      res.status(200).json(createdWarranty);
+    });
+
+    // Add the /api/v2/warranties/:id endpoint for updating warranties
+    this.expressServer.patch('/api/v2/warranties/:id', (req, res) => {
+      const warrantyId = req.params.id;
+      const warrantyData = req.body;
+      // Handle the warranty update logic
+      // For example:
+      // const updatedWarranty = updateWarrantyInDatabase(warrantyId, warrantyData);
+      const updatedWarranty = { id: warrantyId, ...warrantyData }; // Mock response
+      res.status(200).json(updatedWarranty);
+    });
+
+    // Add the /api/v2/warranties/:id endpoint for deleting warranties
+    this.expressServer.delete('/api/v2/warranties/:id', (req, res) => {
+      const warrantyId = req.params.id;
+      // Handle the warranty deletion logic
+      // For example:
+      // deleteWarrantyFromDatabase(warrantyId);
+      res.status(200).json({ id: warrantyId }); // Mock response
+    });
+
     this.expressServer.use(
       expressWinston.logger({
         transports: Logger.transports,

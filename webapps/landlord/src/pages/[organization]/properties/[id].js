@@ -25,7 +25,6 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { withAuthentication } from '../../../components/Authentication';
 import WarrantyList from '../../../components/properties/warranties/WarrantyList';
-import { set } from 'lodash';
 import PropertyWarrantiesForm from '../../../components/properties/warranties/PropertyWarrantiesForm';
 
 function PropertyOverviewCard() {
@@ -103,7 +102,7 @@ function Property() {
   const [openConfirmDeletePropertyDialog, setOpenConfirmDeletePropertyDialog] =
     useState(false);
   const [fetching] = useFillStore(fetchData, [router]);
-  const [showWarrantyList, setShowWarrantyList, ] = useState(false);
+  const [showWarrantyList, setShowWarrantyList] = useState(false);
   const [showCreateWarranty, setShowCreateWarranty] = useState(false);
 
   const handleBack = useCallback(() => {
@@ -180,6 +179,36 @@ function Property() {
     [store, t, router]
   );
 
+  const onSubmitWarranty = useCallback(
+    async (warrantyData) => {
+      try {
+        const response = await store.property.createWarranty(warrantyData);
+        console.log('createWarranty response:', response);
+        if (!response) {
+          console.error('No response received from createWarranty');
+          return toast.error(t('Something went wrong'));
+        }
+        const { status, data } = response;
+        if (status !== 200) {
+          switch (status) {
+            case 422:
+              return toast.error(t('Warranty data is missing or invalid'));
+            case 403:
+              return toast.error(t('You are not allowed to update the warranty'));
+            default:
+              console.error('Unexpected status code:', status);
+              return toast.error(t('Something went wrong'));
+          }
+        }
+        setShowCreateWarranty(false);
+        setShowWarrantyList(true);
+      } catch (error) {
+        console.error('Failed to submit warranty form:', error);
+        toast.error(t('Something went wrong'));
+      }
+    },
+    [store.property, t]
+  );
 
   const onAccessWarranties = useCallback(() => {
     setShowWarrantyList(true);
@@ -207,6 +236,7 @@ function Property() {
       />
     );
   }
+
   return (
     <Page
       loading={fetching}
@@ -247,10 +277,9 @@ function Property() {
                 <Tab label={t('Create Warranty')} wrapped />
               </Tabs>
               <TabPanel value={tabSelectedIndex} index={0}>
-                <PropertyWarrantiesForm onSubmit={onSubmit} />
+                <PropertyWarrantiesForm onSubmit={onSubmitWarranty} />
               </TabPanel>
             </Card>
-            
           ) : showWarrantyList ? (
             <Card className="md:col-span-2">
               <WarrantyList data={store.property.selected.warranties} />

@@ -23,7 +23,8 @@ const PropertySchema = new mongoose.Schema<CollectionTypes.Property>({
   },
 
   price: Number,
-  warranties: [WarrantySchema] // Embed the Warranty schema
+  // warranties: [WarrantySchema] // Embed the Warranty schema
+  // TODO test the Warranty schema and see if it is necessary to embed it here
 });
 
 export default mongoose.model<CollectionTypes.Property>(
