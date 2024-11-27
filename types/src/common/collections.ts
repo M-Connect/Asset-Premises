@@ -276,5 +276,6 @@ export namespace CollectionTypes {
     endDate: Date;
     amount: number;
     provider: string;
+    type: string;
   };
 }

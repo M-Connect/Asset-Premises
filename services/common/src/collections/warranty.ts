@@ -11,7 +11,8 @@ const WarrantySchema = new mongoose.Schema<CollectionTypes.Warranty>({
   startDate: Date,
   endDate: Date,
   amount: Number,
-  provider: String
+  provider: String,
+  type: String
 });
 
 export default mongoose.model<CollectionTypes.Warranty>('Warranty', WarrantySchema);
