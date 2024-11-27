@@ -265,4 +265,16 @@ export namespace CollectionTypes {
 
     stepperMode: boolean;
   };
+
+  export type Warranty = {
+    _id: string;
+    realmId: string;
+    propertyId: string;
+    name: string;
+    description: string;
+    startDate: Date;
+    endDate: Date;
+    amount: number;
+    provider: string;
+  };
 }
