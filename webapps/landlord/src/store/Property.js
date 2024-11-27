@@ -20,6 +20,9 @@ export default class Property {
       create: flow,
       update: flow,
       delete: flow,
+      createWarranty: flow,
+      updateWarranty: flow,
+      deleteWarranty: flow,
     });
   }
 
@@ -133,36 +136,51 @@ export default class Property {
     }
   }
 
-async createWarranty(warrantyData) {
+  *createWarranty(propertyId, warranty) {
     try {
-      const response = await apiFetcher().post('/warranties', warrantyData);
-      const createdWarranty = response.data;
-      this.items = updateItems(createdWarranty, this.items);
-      return { status: 200, data: createdWarranty };
-    } catch (error) {
-      return { status: error?.response?.status };
-    }
-  }
+      console.log('API call to create warranty for property ID:', propertyId);
+      console.log('Warranty data:', warranty);
 
-  async updateWarranty(warrantyData) {
-    try {
-      const response = await apiFetcher().patch(
-        `/warranties/${warrantyData._id}`,
-        warrantyData
+      const response = yield apiFetcher().post(
+        `/properties/${propertyId}/warranties`,
+        warranty
       );
-      const updatedWarranty = response.data;
-      this.items = updateItems(updatedWarranty, this.items);
-      return { status: 200, data: updatedWarranty };
+      const updatedProperty = response.data;
+      this.items = updateItems(updatedProperty, this.items);
+      if (this.selected?._id === updatedProperty._id) {
+        this.setSelected(updatedProperty);
+      }
+      return { status: 200, data: updatedProperty };
+    } catch (error) {
+      console.error('Error creating warranty:', error);
+      return { status: error?.response?.status };
+    }
+  }
+
+  *updateWarranty(propertyId, warrantyId, warranty) {
+    try {
+      const response = yield apiFetcher().patch(
+        `/properties/${propertyId}/warranties/${warrantyId}`,
+        warranty
+      );
+      const updatedProperty = response.data;
+      this.items = updateItems(updatedProperty, this.items);
+
+      return { status: 200, data: updatedProperty };
     } catch (error) {
       return { status: error?.response?.status };
     }
   }
 
-  async deleteWarranty(warrantyId) {
+  *deleteWarranty(propertyId, warrantyId) {
     try {
-      const response = await apiFetcher().delete(`/warranties/${warrantyId}`);
-      this.items = this.items.filter((item) => item._id !== warrantyId);
-      return { status: 200, data: response.data };
+      const response = yield apiFetcher().delete(
+        `/properties/${propertyId}/warranties/${warrantyId}`
+      );
+      const updatedProperty = response.data;
+      this.items = updateItems(updatedProperty, this.items);
+
+      return { status: 200, data: updatedProperty };
     } catch (error) {
       return { status: error?.response?.status };
     }

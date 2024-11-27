@@ -5,6 +5,7 @@ export const QueryKeys = {
   DASHBOARD: 'dashboard',
   ORGANIZATIONS: 'organizations',
   PROPERTIES: 'properties',
+  WARRANTIES: 'warranties',
   TENANTS: 'tenants',
   RENTS: 'rents',
   LEASES: 'leases'
@@ -42,6 +43,11 @@ export async function fetchProperties(store) {
   const response = await store.property.fetch();
   return response.data;
 }
+
+export const fetchWarranties = async (store) => {
+  const response = await apiFetcher().get(`/properties/${store.property.selected._id}/warranties`);
+  return response.data;
+};
 
 export async function fetchTenants(store) {
   const response = await store.tenant.fetch();

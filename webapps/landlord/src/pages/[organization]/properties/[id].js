@@ -25,8 +25,14 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { withAuthentication } from '../../../components/Authentication';
 import WarrantyList from '../../../components/properties/warranties/WarrantyList';
-import PropertyWarrantiesForm from '../../../components/properties/warranties/PropertyWarrantiesForm';
+import NewWarrantyDialog from '../../../components/properties/warranties/NewWarrantyDialog';
+import { WarrantyPropertyPointer } from '../../../components/properties/warranties/WarrantyPropertyPointer';
 
+async function setWarrantyPropertyPointer() {
+  const store = useContext(StoreContext);
+  const id = await store.property.selected._id;
+  return id;
+}
 function PropertyOverviewCard() {
   const { t } = useTranslation('common');
   const store = useContext(StoreContext);
@@ -88,6 +94,11 @@ function OccupancyHistoryCard() {
 
 async function fetchData(store, router) {
   const results = await store.property.fetchOne(router.query.id);
+  const warranties = await store.property.fetchWarranties(router.query.id);
+  WarrantyPropertyPointer.setPropertyId(router.query.id);
+  console.log('Warranties:', warranties);
+  console.log('Property:', store.property.selected);
+  console.log('WarrantyPropertyPointer:', WarrantyPropertyPointer.getPropertyId());
   store.property.setSelected(
     store.property.items.find(({ _id }) => _id === router.query.id)
   );
@@ -103,8 +114,8 @@ function Property() {
     useState(false);
   const [fetching] = useFillStore(fetchData, [router]);
   const [showWarrantyList, setShowWarrantyList] = useState(false);
-  const [showCreateWarranty, setShowCreateWarranty] = useState(false);
-
+  const [openCreateWarranty, setShowCreateWarranty] = useState(false);
+  
   const handleBack = useCallback(() => {
     router.push(store.appHistory.previousPath);
   }, [router, store.appHistory.previousPath]);
@@ -178,42 +189,52 @@ function Property() {
     },
     [store, t, router]
   );
-
+  
   const onSubmitWarranty = useCallback(
     async (warrantyData) => {
+      console.log('Submitting warranty for property ID:', store.property.selected._id);
       try {
-        const response = await store.property.createWarranty(warrantyData);
-        console.log('createWarranty response:', response);
-        if (!response) {
-          console.error('No response received from createWarranty');
-          return toast.error(t('Something went wrong'));
+        const currentProperty = toJS(store.property.selected);
+
+        if (WarrantyPropertyPointer.getPropertyId === null) {
+          toast.error(t('Property ID is missing'));
+          return;
         }
-        const { status, data } = response;
+
+        console.log('Submitting warranty for property ID:', store.property.selected._id);
+        console.log('Warranty data:', warrantyData);
+
+        const { status, data } = await store.property.createWarranty(
+          WarrantyPropertyPointer.getPropertyId(),
+          warrantyData
+        );
+
         if (status !== 200) {
           switch (status) {
             case 422:
-              return toast.error(t('Warranty data is missing or invalid'));
+              return toast.error(t('Required warranty fields are missing'));
             case 403:
-              return toast.error(t('You are not allowed to update the warranty'));
+              return toast.error(t('You are not allowed to add a warranty'));
+            case 404:
+              return toast.error(t('Property not found'));
             default:
-              console.error('Unexpected status code:', status);
               return toast.error(t('Something went wrong'));
           }
         }
-        setShowCreateWarranty(false);
-        setShowWarrantyList(true);
+
+        toast.success(t('Warranty created successfully'));
       } catch (error) {
-        console.error('Failed to submit warranty form:', error);
-        toast.error(t('Something went wrong'));
+        toast.error(t('Error creating warranty. Check console for details.'));
+        console.error(error);
       }
     },
-    [store.property, t]
+    [store, t]
   );
 
   const onAccessWarranties = useCallback(() => {
     setShowWarrantyList(true);
   }, []);
-  
+
   const onCreateWarranty = useCallback(() => {
     setShowCreateWarranty(true);
   }, []);
@@ -225,10 +246,7 @@ function Property() {
         title={t('Warranties')}
         renderContent={() => (
           <div className="text-base">
-            <button
-              className="btn btn-primary"
-              onClick={onCreateWarranty}
-            >
+            <button className="btn btn-primary" onClick={onCreateWarranty}>
               {t('Create Warranties')}
             </button>
           </div>
@@ -266,19 +284,25 @@ function Property() {
     >
       <>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {showCreateWarranty ? (
+          {openCreateWarranty ? (
             <Card className="md:col-span-2">
               <Tabs
                 variant="scrollable"
                 value={tabSelectedIndex}
                 onChange={handleTabChange}
+                onClick={onCreateWarranty}
                 aria-label="Create warranty tabs"
               >
                 <Tab label={t('Create Warranty')} wrapped />
               </Tabs>
-              <TabPanel value={tabSelectedIndex} index={0}>
-                <PropertyWarrantiesForm onSubmit={onSubmitWarranty} />
-              </TabPanel>
+              
+              <NewWarrantyDialog
+                open={openCreateWarranty}
+                setOpen={setShowCreateWarranty}
+                onSubmit={onSubmitWarranty}
+                propertyId={store.property.selected._id}
+
+              />
             </Card>
           ) : showWarrantyList ? (
             <Card className="md:col-span-2">
@@ -303,7 +327,7 @@ function Property() {
           <div className="hidden md:grid grid-cols-1 gap-4 h-fit">
             <PropertyOverviewCard />
             <OccupancyHistoryCard />
-            {showWarrantyList && < WarrantyAccessCard />}
+            {showWarrantyList && <WarrantyAccessCard />}
           </div>
         </div>
 
@@ -312,6 +336,7 @@ function Property() {
           subTitle={store.property.selected.name}
           open={openConfirmDeletePropertyDialog}
           setOpen={setOpenConfirmDeletePropertyDialog}
+          propertyId={store.property.selected._id}
           onConfirm={onDeleteProperty}
         />
       </>

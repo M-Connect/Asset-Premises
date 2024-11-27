@@ -2,7 +2,7 @@ import { EmptyIllustration } from '../../../components/Illustrations';
 import WarrantyListItem from './WarrantyListItem';
 import useTranslation from 'next-translate/useTranslation';
 
-export default function WarrantyList({ data = [] }) {
+export default function WarrantyList({ data = []}) {
   const { t } = useTranslation('common');
 
   return data.length > 0 ? (

@@ -1,63 +1,58 @@
-import { useCallback, useContext } from 'react';
-import { Badge } from '../../../components/ui/badge';
-import { Button } from '../../../components/ui/button';
-import { Card } from '../../../components/ui/card';
-import WarrantyIcon from './WarrantyIcon';
+// WarrantyList.js
+import { useQuery } from '@tanstack/react-query';
+import { useContext } from 'react';
+import useTranslation from 'next-translate/useTranslation'; // Updated import
+import { List } from '../../ResourceList';
 import { StoreContext } from '../../../store';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
+import { fetchWarranties, QueryKeys } from '../../../utils/restcalls';
+import { toast } from 'sonner';
 
-export default function WarrantyListItem({ warranty }) {
-  const router = useRouter();
+function _filterWarranties(data = [], filters) {
+  let filteredItems = data;
+  
+  if (filters.searchText) {
+    const regExp = /\s|\.|-/gi;
+    const cleanedSearchText = filters.searchText.toLowerCase().replace(regExp, '');
+    
+    filteredItems = filteredItems.filter(
+      ({ name }) => name.replace(regExp, '').toLowerCase().indexOf(cleanedSearchText) !== -1
+    );
+  }
+  return filteredItems;
+}
+
+// Changed to named export
+export function WarrantyListItem() {
   const { t } = useTranslation('common');
   const store = useContext(StoreContext);
+  
+  const { data, isError, isLoading } = useQuery({
+    queryKey: [QueryKeys.WARRANTIES, store.property.selected._id],
+    queryFn: () => fetchWarranties(store.property.selected._id),
+    enabled: !!store.property.selected._id
+  });
 
-  const onClick = useCallback(async () => {
-    store.appHistory.setPreviousPath(router.asPath);
-    await router.push(`/warranties/${warranty._id}`);
-  }, [warranty._id, router, store]);
+  if (isError) {
+    toast.error(t('Error fetching warranties'));
+    return null;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <Card className="p-4 cursor-pointer hover:bg-accent/90" onClick={onClick}>
-      <div className="flex flex-col md:items-end md:flex-row md:justify-between">
-        <div>
-          <Badge
-            variant={warranty.status === 'active' ? 'success' : 'secondary'}
-            className="w-fit border border-secondary-foreground/20"
-          >
-            {warranty.status === 'active' ? t('Active') : t('Inactive')}
-          </Badge>
-          <Button
-            variant="link"
-            className="flex items-center font-normal gap-2 p-0 mt-2"
-            data-cy="openResourceButton"
-          >
-            <WarrantyIcon status={warranty.status} />
-            <span className="text-xl">{warranty.name}</span>
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            {warranty.description}
-          </span>
+    <List
+      data={data}
+      filterFn={_filterWarranties}
+      renderItem={({ item }) => (
+        <div className="flex items-center justify-between p-4">
+          <span>{item.name}</span>
         </div>
-
-        <div className="md:text-right">
-          <p className="text-sm text-muted-foreground">
-            {t('Coverage')}
-          </p>
-          <div className="text-2xl font-semibold">
-            {warranty.coverageScope.coveredItems}
-          </div>
-        </div>
-      </div>
-      <div className="flex items-center gap-2">
-        {warranty.status !== 'active' && (
-          <p className="text-sm text-muted-foreground">
-            {t('Status: {{status}}', {
-              status: warranty.status
-            })}
-          </p>
-        )}
-      </div>
-    </Card>
+      )}
+    />
   );
 }
+
+// Use named export
+export default WarrantyListItem;
