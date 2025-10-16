@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import { Button } from '../../ui/button';
 import { fetchProperties, QueryKeys } from '../../../utils/restcalls';
 import { Form, Formik } from 'formik';
@@ -8,9 +9,9 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PropertyList from '../../properties/PropertyList';
 import ResponsiveDialog from '../../ResponsiveDialog';
 import useTranslation from 'next-translate/useTranslation';
+/* eslint-enable sort-imports */
 
-const memberInitialValues = {
-};
+const memberInitialValues = {};
 
 export default function PropertyManagerRemovePropDialog({
   open,
@@ -27,22 +28,27 @@ export default function PropertyManagerRemovePropDialog({
     queryKey: [QueryKeys.PROPERTIES],
     queryFn: () => fetchProperties(store),
     refetchOnMount: 'always',
-    retry: 3,
+    retry: 3
   });
 
   // transform to use it in select field
   const propValues = useMemo(() => {
     return allProperties?.map((prop) => ({
-    id: prop._id,
-    label: prop.name + ": " + prop.address?.street1 + ", " + prop.address?.city + ", " + prop.address?.state,
-    value: prop._id,
+      id: prop._id,
+      label:
+        prop.name +
+        ': ' +
+        prop.address?.street1 +
+        ', ' +
+        prop.address?.city +
+        ', ' +
+        prop.address?.state,
+      value: prop._id
     }));
   }, [allProperties]);
 
- const memberProperties = useMemo(() => {
-    return allProperties?.filter(
-      ({ _id }) => data?.properties?.includes(_id)
-    );
+  const memberProperties = useMemo(() => {
+    return allProperties?.filter(({ _id }) => data?.properties?.includes(_id));
   }, [allProperties, data]);
 
   const handleSave = useCallback(() => {
@@ -56,12 +62,13 @@ export default function PropertyManagerRemovePropDialog({
 
   const handleSelectChange = useCallback(
     (prop) => {
-      if(data?.properties?.includes(prop))
-      {
+      if (data?.properties?.includes(prop)) {
         console.log('Removing Prop to member');
         data.properties = data.properties.filter((item) => item !== prop);
       }
-    }, [data]);
+    },
+    [data]
+  );
 
   return (
     <ResponsiveDialog
@@ -77,24 +84,28 @@ export default function PropertyManagerRemovePropDialog({
           {() => {
             return (
               <Form autoComplete="off">
-                   <style jsx>{`
-                      @media (min-width: 768px) {
-                          .grid.override {
-                              grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-                          }
-                      }
+                <style jsx>{`
+                  @media (min-width: 768px) {
+                    .grid.override {
+                      grid-template-columns: repeat(
+                        1,
+                        minmax(0, 1fr)
+                      ) !important;
+                    }
+                  }
 
-                      @media (min-width: 1024px) {
-                          .grid.override {
-                              grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-                          }
-                      }
-                  `}</style>
+                  @media (min-width: 1024px) {
+                    .grid.override {
+                      grid-template-columns: repeat(
+                        1,
+                        minmax(0, 1fr)
+                      ) !important;
+                    }
+                  }
+                `}</style>
                 <div className="pt-6 space-y-4">
                   <div>{'Currently Assigned Properties'}</div>
-                  <PropertyList
-                    data={memberProperties}
-                  />
+                  <PropertyList data={memberProperties} />
                   <SelectField
                     label={'Select Property To Remove'}
                     name="property"
@@ -112,9 +123,7 @@ export default function PropertyManagerRemovePropDialog({
           <Button variant="outline" onClick={handleClose}>
             {t('Cancel')}
           </Button>
-          <Button onClick={handleSave}>
-            {t('Remove')}
-          </Button>
+          <Button onClick={handleSave}>{t('Remove')}</Button>
         </>
       )}
     />

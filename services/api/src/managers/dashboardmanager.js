@@ -12,33 +12,36 @@ export async function all(req, res) {
   let allTenants;
 
   if (req.user.role === 'property manager') {
-      // get properties for this prop manager
-      allProperties = await Collections.Property.find({
-        realmId: req.headers.organizationid
-      });
-      const member = req.realm.members?.find((member) => String(member.email) === String(req.user.email));
-      const memberPropertyIds = member?.properties?.map((property) => String(property)) || [];
-      allProperties = allProperties.filter(({ _id }) =>
-        memberPropertyIds.includes(String(_id))
-      );
+    // get properties for this prop manager
+    allProperties = await Collections.Property.find({
+      realmId: req.headers.organizationid
+    });
+    const member = req.realm.members?.find(
+      (member) => String(member.email) === String(req.user.email)
+    );
+    const memberPropertyIds =
+      member?.properties?.map((property) => String(property)) || [];
+    allProperties = allProperties.filter(({ _id }) =>
+      memberPropertyIds.includes(String(_id))
+    );
 
-      // get active tenants for only the props this user has access to
-      allTenants = await Collections.Tenant.find({
-        realmId: req.headers.organizationid,
-        'properties.propertyId': {
-          $in: allProperties.map(({ _id }) => _id)
-      }});
-  }
-  else {
-      // get properties
-      allProperties = await Collections.Property.find({
-        realmId: req.headers.organizationid
-      });
+    // get active tenants for only the props this user has access to
+    allTenants = await Collections.Tenant.find({
+      realmId: req.headers.organizationid,
+      'properties.propertyId': {
+        $in: allProperties.map(({ _id }) => _id)
+      }
+    });
+  } else {
+    // get properties
+    allProperties = await Collections.Property.find({
+      realmId: req.headers.organizationid
+    });
 
-      // get active tenants
-      allTenants = await Collections.Tenant.find({
-        realmId: req.headers.organizationid
-      });
+    // get active tenants
+    allTenants = await Collections.Tenant.find({
+      realmId: req.headers.organizationid
+    });
   }
 
   // count active tenants

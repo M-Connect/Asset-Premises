@@ -6,7 +6,7 @@ import { Collections } from '@microrealestate/common';
 export async function add(req, res) {
   console.log('WarrantyManager.add', req.body);
   const warranty = new Collections.Warranty({
-    ...req.body,
+    ...req.body
   });
   await warranty.save();
   return res.json(warranty);
@@ -24,8 +24,8 @@ export async function update(req, res) {
   ).lean();
 
   if (!dbWarranty) {
-      return res.status(404).json({ error: 'Warranty not found' });
-}
+    return res.status(404).json({ error: 'Warranty not found' });
+  }
   return res.json(dbWarranty);
 }
 
@@ -60,8 +60,8 @@ export async function one(req, res) {
     _id: warrantyId
   }).lean();
 
-    if (!dbWarranty) {
-        return res.status(404).json({ error: 'Warranty not found' });
-    }
+  if (!dbWarranty) {
+    return res.status(404).json({ error: 'Warranty not found' });
+  }
   return res.json(dbWarranty);
 }

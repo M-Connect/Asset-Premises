@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import { Card } from '../../../components/ui/card';
 import { DashboardCard } from '../../../components/dashboard/DashboardCard';
 import { LuArrowLeft, LuHistory, LuKeyRound, LuTrash } from 'react-icons/lu';
@@ -25,6 +26,7 @@ import ShortcutButton from '../../../components/ShortcutButton';
 import useFillStore from '../../../hooks/useFillStore';
 import useTranslation from 'next-translate/useTranslation';
 import WarrantyList from '../../../components/properties/warranties/WarrantyList';
+/* eslint-enable sort-imports */
 
 function PropertyOverviewCard() {
   const { t } = useTranslation('common');
@@ -69,7 +71,10 @@ function CreateWarrantyButton() {
         onClick={onCreateWarranty}
       />
       {openCreateWarranty && (
-        <NewWarrantyDialog open={openCreateWarranty} onClose={onCloseWarrantyDialog} />
+        <NewWarrantyDialog
+          open={openCreateWarranty}
+          onClose={onCloseWarrantyDialog}
+        />
       )}
     </>
   );
@@ -230,7 +235,11 @@ function Property() {
     >
       <>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Tabs defaultValue="property" className="md:col-span-2" onValueChange={setActiveTab}>
+          <Tabs
+            defaultValue="property"
+            className="md:col-span-2"
+            onValueChange={setActiveTab}
+          >
             <TabsList className="flex justify-start overflow-x-auto overflow-y-hidden">
               <TabsTrigger value="property" className="w-1/2">
                 {t('Property')}
@@ -241,7 +250,7 @@ function Property() {
             </TabsList>
             <TabsContent value="property">
               <Card className="p-6">
-                <PropertyForm onSubmit={onSubmit}/>
+                <PropertyForm onSubmit={onSubmit} />
               </Card>
             </TabsContent>
             <TabsContent value="warranties">

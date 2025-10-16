@@ -12,4 +12,7 @@ const WarrantySchema = new mongoose.Schema<CollectionTypes.Warranty>({
   type: String
 });
 
-export default mongoose.model<CollectionTypes.Warranty>('Warranty', WarrantySchema);
+export default mongoose.model<CollectionTypes.Warranty>(
+  'Warranty',
+  WarrantySchema
+);

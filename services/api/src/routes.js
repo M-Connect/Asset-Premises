@@ -86,8 +86,14 @@ export default function routes() {
   router.use('/properties', propertiesRouter);
 
   const warrantiesRouter = express.Router();
-  warrantiesRouter.get('/:propId', Middlewares.asyncWrapper(warrantyManager.all));
-  warrantiesRouter.get('/:propId/:id', Middlewares.asyncWrapper(warrantyManager.one));
+  warrantiesRouter.get(
+    '/:propId',
+    Middlewares.asyncWrapper(warrantyManager.all)
+  );
+  warrantiesRouter.get(
+    '/:propId/:id',
+    Middlewares.asyncWrapper(warrantyManager.one)
+  );
   warrantiesRouter.post('/', Middlewares.asyncWrapper(warrantyManager.add));
   warrantiesRouter.patch(
     '/:id',

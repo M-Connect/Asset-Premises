@@ -20,7 +20,7 @@ export default class Warranty {
       fetchOne: flow,
       create: flow,
       update: flow,
-      delete: flow,
+      delete: flow
     });
   }
 
@@ -44,12 +44,11 @@ export default class Warranty {
 
   setSelected = (warranty) => (this.selected = warranty);
 
-  setFilters = ({ searchText = '' }) =>
-    (this.filters = { searchText });
+  setFilters = ({ searchText = '' }) => (this.filters = { searchText });
 
   *fetch(propertyId) {
     try {
-      console.log("Calling Warranties API")
+      console.log('Calling Warranties API');
       const response = yield apiFetcher().get(`/warranties/${propertyId}`);
 
       this.items = response.data;
@@ -66,7 +65,9 @@ export default class Warranty {
 
   *fetchOne(propertyId, warrantyId) {
     try {
-      const response = yield apiFetcher().get(`/warranties/${propertyId}/${warrantyId}`);
+      const response = yield apiFetcher().get(
+        `/warranties/${propertyId}/${warrantyId}`
+      );
       const updatedWarranty = response.data;
       this.items = updateItems(updatedWarranty, this.items);
       if (this.selected?._id === updatedWarranty._id) {

@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import { ADMIN_ROLE, ROLES } from '../../store/User';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
@@ -22,6 +23,7 @@ import moment from 'moment';
 import PropertyManagerAddPropDialog from './members/PropertyManagerAddPropDialog';
 import PropertyManagerRemovePropDialog from './members/PropertyManagerRemovePropDialog';
 import useTranslation from 'next-translate/useTranslation';
+/* eslint-enable sort-imports */
 
 export default function Members({ organization }) {
   const { t } = useTranslation('common');
@@ -38,8 +40,12 @@ export default function Members({ organization }) {
   const [openMemberToRemoveConfirmDialog, setOpenMemberToRemoveConfirmDialog] =
     useState(false);
   const [selectedMemberToRemove, setSelectedMemberToRemove] = useState(null);
-  const [openPropertyManagerAddPropDialog, setPropertyManagerAddPropDialog] = useState(false);
-  const [openPropertyManagerRemovePropDialog, setPropertyManagerRemovePropDialog] = useState(false);
+  const [openPropertyManagerAddPropDialog, setPropertyManagerAddPropDialog] =
+    useState(false);
+  const [
+    openPropertyManagerRemovePropDialog,
+    setPropertyManagerRemovePropDialog
+  ] = useState(false);
   const [selectedMemberInOrg, setSelectedMemberInOrg] = useState(null);
   const [openAppToRemoveConfirmDialog, setOpenAppToRemoveConfirmDialog] =
     useState(false);
@@ -87,12 +93,14 @@ export default function Members({ organization }) {
       await mutateAsync({
         store,
         organization: mergeOrganization(organization, {
-          members: updatedMembers,
+          members: updatedMembers
         })
       });
 
       // Update selectedMemberInOrg with the new member data
-      const updatedMember = updatedMembers.find((m) => m.email === member.email);
+      const updatedMember = updatedMembers.find(
+        (m) => m.email === member.email
+      );
       setSelectedMemberInOrg(updatedMember);
 
       setUpdating();
@@ -187,7 +195,7 @@ export default function Members({ organization }) {
                     size="icon"
                     className="w-12"
                   >
-                  <LuTrash className="size-6" />
+                    <LuTrash className="size-6" />
                   </Button>
                   <Button
                     variant="ghost"

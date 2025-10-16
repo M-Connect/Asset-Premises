@@ -63,15 +63,17 @@ async function _fetchTenants(req, tenantId) {
 
   // Use the properties assigned to the property manager if this is a prop manager
   if (req.user.role === 'property manager') {
-    const member = req.realm.members?.find((member) => String(member.email) === String(req.user.email));
-    const memberPropertyIdsMatch = member?.properties?.map((property) => ({
-       'properties.propertyId': String(property)
-    })) || [];
+    const member = req.realm.members?.find(
+      (member) => String(member.email) === String(req.user.email)
+    );
+    const memberPropertyIdsMatch =
+      member?.properties?.map((property) => ({
+        'properties.propertyId': String(property)
+      })) || [];
     $match = {
-      $or : memberPropertyIdsMatch
+      $or: memberPropertyIdsMatch
     };
-  } 
-  else {
+  } else {
     $match = {
       realmId
     };

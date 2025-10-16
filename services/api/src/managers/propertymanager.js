@@ -26,8 +26,11 @@ async function _toPropertiesData(realm, inputProperties) {
 }
 
 async function _toPropertiesDataByUser(realm, user, inputProperties) {
-  const member = realm.members?.find((member) => String(member.email) === String(user.email));
-  const memberPropertyIds = member?.properties?.map((property) => String(property)) || [];
+  const member = realm.members?.find(
+    (member) => String(member.email) === String(user.email)
+  );
+  const memberPropertyIds =
+    member?.properties?.map((property) => String(property)) || [];
   const filteredProperties = inputProperties.filter(({ _id }) =>
     memberPropertyIds.includes(String(_id))
   );
@@ -113,10 +116,9 @@ export async function all(req, res) {
   let properties;
   if (req.user.role === 'property manager') {
     properties = await _toPropertiesDataByUser(realm, req.user, dbProperties);
-  } 
-  else {
+  } else {
     properties = await _toPropertiesData(realm, dbProperties);
-  } 
+  }
 
   return res.json(properties);
 }

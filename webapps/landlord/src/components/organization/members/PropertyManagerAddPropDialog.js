@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import { Button } from '../../ui/button';
 import { fetchProperties, QueryKeys } from '../../../utils/restcalls';
 import { Form, Formik } from 'formik';
@@ -8,9 +9,9 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PropertyList from '../../properties/PropertyList';
 import ResponsiveDialog from '../../ResponsiveDialog';
 import useTranslation from 'next-translate/useTranslation';
+/* eslint-enable sort-imports */
 
-const memberInitialValues = {
-};
+const memberInitialValues = {};
 
 export default function PropertyManagerAddPropDialog({
   open,
@@ -27,22 +28,27 @@ export default function PropertyManagerAddPropDialog({
     queryKey: [QueryKeys.PROPERTIES],
     queryFn: () => fetchProperties(store),
     refetchOnMount: 'always',
-    retry: 3,
+    retry: 3
   });
 
   // transform to use it in select field
   const propValues = useMemo(() => {
     return allProperties?.map((prop) => ({
-    id: prop._id,
-    label: prop.name + ": " + prop.address?.street1 + ", " + prop.address?.city + ", " + prop.address?.state,
-    value: prop._id,
+      id: prop._id,
+      label:
+        prop.name +
+        ': ' +
+        prop.address?.street1 +
+        ', ' +
+        prop.address?.city +
+        ', ' +
+        prop.address?.state,
+      value: prop._id
     }));
   }, [allProperties]);
 
- const memberProperties = useMemo(() => {
-    return allProperties?.filter(
-      ({ _id }) => data?.properties?.includes(_id)
-    );
+  const memberProperties = useMemo(() => {
+    return allProperties?.filter(({ _id }) => data?.properties?.includes(_id));
   }, [allProperties, data]);
 
   const handleSave = useCallback(() => {
@@ -56,12 +62,13 @@ export default function PropertyManagerAddPropDialog({
 
   const handleSelectChange = useCallback(
     (prop) => {
-      if(!data?.properties?.includes(prop))
-      {
+      if (!data?.properties?.includes(prop)) {
         console.log('Adding Prop to member');
         data.properties.push(prop);
       }
-    }, [data]);
+    },
+    [data]
+  );
 
   return (
     <ResponsiveDialog
@@ -78,23 +85,27 @@ export default function PropertyManagerAddPropDialog({
             return (
               <Form autoComplete="off">
                 <div className="pt-6 space-y-4">
-                   <style jsx>{`
-                      @media (min-width: 768px) {
-                          .grid.override {
-                              grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-                          }
+                  <style jsx>{`
+                    @media (min-width: 768px) {
+                      .grid.override {
+                        grid-template-columns: repeat(
+                          1,
+                          minmax(0, 1fr)
+                        ) !important;
                       }
+                    }
 
-                      @media (min-width: 1024px) {
-                          .grid.override {
-                              grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-                          }
+                    @media (min-width: 1024px) {
+                      .grid.override {
+                        grid-template-columns: repeat(
+                          1,
+                          minmax(0, 1fr)
+                        ) !important;
                       }
+                    }
                   `}</style>
                   <div>{'Currently Assigned Properties'}</div>
-                  <PropertyList
-                    data={memberProperties}
-                  />
+                  <PropertyList data={memberProperties} />
                   <SelectField
                     label={'Select Property To Add'}
                     name="property"
@@ -112,9 +123,7 @@ export default function PropertyManagerAddPropDialog({
           <Button variant="outline" onClick={handleClose}>
             {t('Cancel')}
           </Button>
-          <Button onClick={handleSave}>
-            {t('Add')}
-          </Button>
+          <Button onClick={handleSave}>{t('Add')}</Button>
         </>
       )}
     />

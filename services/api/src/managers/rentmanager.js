@@ -19,11 +19,13 @@ async function _findOccupants(req, tenantId, startTerm, endTerm) {
   };
   // Use the properties assigned to the property manager if this is a prop manager
   if (req.user.role === 'property manager') {
-    const member = req.realm.members?.find((member) => String(member.email) === String(req.user.email));
+    const member = req.realm.members?.find(
+      (member) => String(member.email) === String(req.user.email)
+    );
     member?.properties?.forEach((propertyId) => {
       filter.$query.$and.push({ 'properties._id': propertyId });
     });
-  } 
+  }
 
   if (tenantId) {
     filter['$query']['$and'].push({ _id: tenantId });
@@ -108,7 +110,7 @@ async function _getRentsDataByTerm(
   locale,
   realm,
   currentDate,
-  frequency, 
+  frequency,
   req
 ) {
   const startTerm = Number(currentDate.startOf(frequency).format('YYYYMMDDHH'));

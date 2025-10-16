@@ -75,7 +75,7 @@ export function toUILease(tenant: TenantAPI.TenantDataType): Lease {
       status: invoice.status,
       methods: invoice.methods
     })),
-    documents: [],
+    documents: []
     //documents: tenant.lease.documents.map((document) => ({}))
   };
 }

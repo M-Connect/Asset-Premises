@@ -5,8 +5,8 @@ module.exports = {
   locales: ['en', 'fr-FR', 'pt-BR', 'de-DE'],
   defaultLocale: 'en',
   pages: {
-    '*': ['common'],
+    '*': ['common']
   },
   keySeparator: false,
-  nsSeparator: false,
+  nsSeparator: false
 };
