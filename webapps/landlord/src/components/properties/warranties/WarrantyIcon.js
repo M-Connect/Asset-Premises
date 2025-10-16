@@ -1,5 +1,5 @@
+import { FaBolt, FaBuilding, FaTint } from 'react-icons/fa';
 import React from 'react';
-import { FaBolt, FaTint, FaBuilding } from 'react-icons/fa';
 
 const WarrantyIcon = ({ type }) => {
   switch (type) {

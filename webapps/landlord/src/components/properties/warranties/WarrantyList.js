@@ -1,7 +1,7 @@
-import React from 'react';
-import WarrantyListItem from './WarrantyListItem';
 import { EmptyIllustration } from '../../../components/Illustrations';
+import React from 'react';
 import useTranslation from 'next-translate/useTranslation';
+import WarrantyListItem from './WarrantyListItem';
 
 
 export default function WarrantyList({ data }) {

@@ -1,6 +1,6 @@
+import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import React from 'react';
 import WarrantyIcon from './WarrantyIcon';
-import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 
 const WarrantyListItem = ({ warranty }) => {
   return (

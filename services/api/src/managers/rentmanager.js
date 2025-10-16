@@ -299,7 +299,6 @@ async function _updateByTerm(
 }
 
 export async function rentsOfOccupant(req, res) {
-  const realm = req.realm;
   const { id } = req.params;
   const term = Number(moment().format('YYYYMMDDHH'));
 
@@ -345,8 +344,7 @@ async function _rentOfOccupant(
   locale,
   realm,
   tenantId,
-  term,
-  req
+  term
 ) {
   const [dbOccupants = [], emailStatus = {}] = await Promise.all([
     _findOccupants(realm, tenantId, Number(term)).catch(logger.error),

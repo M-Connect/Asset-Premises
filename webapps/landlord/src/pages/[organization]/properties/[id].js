@@ -1,30 +1,30 @@
+import { Card } from '../../../components/ui/card';
+import { DashboardCard } from '../../../components/dashboard/DashboardCard';
 import { LuArrowLeft, LuHistory, LuKeyRound, LuTrash } from 'react-icons/lu';
+import { observer } from 'mobx-react-lite';
+import { StoreContext } from '../../../store';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger
 } from '../../../components/ui/tabs';
+import { toast } from 'sonner';
+import { toJS } from 'mobx';
 import { useCallback, useContext, useState } from 'react';
-import { Card } from '../../../components/ui/card';
+import { useRouter } from 'next/router';
+import { withAuthentication } from '../../../components/Authentication';
 import ConfirmDialog from '../../../components/ConfirmDialog';
-import { DashboardCard } from '../../../components/dashboard/DashboardCard';
 import Map from '../../../components/Map';
 import moment from 'moment';
+import NewWarrantyDialog from '../../../components/properties/warranties/NewWarrantyDialog';
 import NumberFormat from '../../../components/NumberFormat';
-import { observer } from 'mobx-react-lite';
 import Page from '../../../components/Page';
 import PropertyForm from '../../../components/properties/PropertyForm';
 import ShortcutButton from '../../../components/ShortcutButton';
-import { StoreContext } from '../../../store';
-import { toast } from 'sonner';
-import { toJS } from 'mobx';
 import useFillStore from '../../../hooks/useFillStore';
-import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { withAuthentication } from '../../../components/Authentication';
 import WarrantyList from '../../../components/properties/warranties/WarrantyList';
-import NewWarrantyDialog from '../../../components/properties/warranties/NewWarrantyDialog';
 
 function PropertyOverviewCard() {
   const { t } = useTranslation('common');

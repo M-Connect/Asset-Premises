@@ -58,7 +58,7 @@ async function _buildPropertyMap(realm) {
 }
 
 async function _fetchTenants(req, tenantId) {
-  const realmId = req.realm._id
+  const realmId = req.realm._id;
   let $match;
 
   // Use the properties assigned to the property manager if this is a prop manager

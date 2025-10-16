@@ -1,4 +1,8 @@
 import { ADMIN_ROLE, ROLES } from '../../store/User';
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
+import { cn } from '../../utils';
+import { LuMapPin, LuMapPinOff, LuTrash } from 'react-icons/lu';
 import { mergeOrganization, updateStoreOrganization } from './utils';
 import { QueryKeys, updateOrganization } from '../../utils/restcalls';
 import {
@@ -9,18 +13,14 @@ import {
   SelectTrigger,
   SelectValue
 } from '../ui/select';
-import { useCallback, useContext, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button } from '../ui/button';
-import { Card } from '../ui/card';
-import { cn } from '../../utils';
-import ConfirmDialog from '../ConfirmDialog';
-import PropertyManagerAddPropDialog from './members/PropertyManagerAddPropDialog';
-import PropertyManagerRemovePropDialog from './members/PropertyManagerRemovePropDialog';
-import { LuTrash, LuMapPin, LuMapPinOff } from 'react-icons/lu';
-import moment from 'moment';
 import { StoreContext } from '../../store';
 import { toast } from 'sonner';
+import { useCallback, useContext, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ConfirmDialog from '../ConfirmDialog';
+import moment from 'moment';
+import PropertyManagerAddPropDialog from './members/PropertyManagerAddPropDialog';
+import PropertyManagerRemovePropDialog from './members/PropertyManagerRemovePropDialog';
 import useTranslation from 'next-translate/useTranslation';
 
 export default function Members({ organization }) {

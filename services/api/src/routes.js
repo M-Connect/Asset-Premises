@@ -4,9 +4,9 @@ import * as emailManager from './managers/emailmanager.js';
 import * as leaseManager from './managers/leasemanager.js';
 import * as occupantManager from './managers/occupantmanager.js';
 import * as propertyManager from './managers/propertymanager.js';
-import * as warrantyManager from './managers/warrantymanager.js';
 import * as realmManager from './managers/realmmanager.js';
 import * as rentManager from './managers/rentmanager.js';
+import * as warrantyManager from './managers/warrantymanager.js';
 import { Middlewares, Service } from '@microrealestate/common';
 import express from 'express';
 

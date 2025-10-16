@@ -1,18 +1,18 @@
 import * as Yup from 'yup';
 import {
+  DateField,
   NumberField,
   SubmitButton,
-  TextField,
-  DateField
+  TextField
 } from '@microrealestate/commonui/components';
 import { Form, Formik } from 'formik';
-import { useContext, useMemo } from 'react';
+import { Hidden } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import { Section } from '../../formfields/Section';
 import { StoreContext } from '../../../store';
-import useTranslation from 'next-translate/useTranslation';
+import { useContext, useMemo } from 'react';
 import types from './types';
-import { Hidden } from '@material-ui/core';
+import useTranslation from 'next-translate/useTranslation';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required(),
@@ -39,7 +39,7 @@ const WarrantyForm = observer(({ onSubmit }) => {
       provider: store.warranty.selected?.provider || '',
       type: store.warranty.selected?.type || ''
     }),
-    [store.warranty.selected]
+    [store.warranty.selected, store.property.selected?._id]
   );
 
 return (
