@@ -2,7 +2,33 @@
 
 All notable changes to this project will be documented here.
 
-## Work in progress
+## Work in progress (Asset-Premises Fork)
+
+### Added
+
+- **Comprehensive Documentation Suite** for warranty management and property manager features
+  - FEATURES.md - Complete feature documentation (359 lines)
+  - API.md - Comprehensive API reference with examples in cURL, JavaScript, and Python (896 lines)
+  - DEPLOYMENT.md - Detailed deployment and configuration guide (553 lines)
+  - Documentation index (README.md) for easy navigation
+  - Updated main README.md to highlight Asset-Premises enhancements
+
+- **Warranty Management System** (see documentation/FEATURES.md)
+  - Full CRUD API with 5 REST endpoints
+  - MongoDB collection with indexed property references
+  - React UI components integrated into property details
+  - Support for 7 warranty types: electrical, plumbing, structural, appliances, HVAC, roofing, other
+  - MobX state management for frontend
+  - Form validation and error handling
+
+- **Property Manager Role** (see documentation/FEATURES.md)
+  - Role-based filtering at API layer with server-side validation
+  - Property assignment system in realm members schema
+  - UI dialogs for managing property assignments
+  - Cascading filters across dashboard, tenants, and rents
+  - API-level security preventing unauthorized access
+
+## Upstream Changes (from MicroRealEstate)
 
 ### Added
 
