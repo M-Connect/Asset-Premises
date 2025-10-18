@@ -1,20 +1,35 @@
-# MicroRealEstate
+# Asset-Premises (Fork of MicroRealEstate)
 
 [![Continuous Integration](https://github.com/microrealestate/microrealestate/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/microrealestate/microrealestate/actions/workflows/ci.yml)
 
-MicroRealEstate is an open-source application designed to assist landlords in managing their properties and rentals. MicroRealEstate (MRE) serves as a centralized platform for landlords to streamline their property management tasks.
+Asset-Premises is an enhanced fork of MicroRealEstate, an open-source application designed to assist landlords in managing their properties and rentals. Asset-Premises extends the core functionality with additional features for warranty management and property manager role-based access control.
 
 ## Key Features
 
-- Centralized Property and Tenant Information: MRE allows landlords to store all property and tenant details in one convenient location. From property specifications to tenant records and contact information.
+### Core Features (from MicroRealEstate)
 
-- Rent Lease Creation: MRE simplifies the process of creating rent leases. It offers customizable templates that enable landlords to generate lease.
+- **Centralized Property and Tenant Information**: Store all property and tenant details in one convenient location. From property specifications to tenant records and contact information.
 
-- Rent Payment Tracking: MRE provides a comprehensive system for tracking rent payments, helping landlords stay updated on transactions and promptly address any overdue payments.
+- **Rent Lease Creation**: Simplify the process of creating rent leases with customizable templates.
 
-- Custom Document Generation: MRE allows landlords to create custom documents for effective communication with tenants. Personalized letters, notices, and announcements can be generated to ensure clear and consistent correspondence.
+- **Rent Payment Tracking**: Comprehensive system for tracking rent payments, helping landlords stay updated on transactions and promptly address any overdue payments.
 
-- Collaboration: Whether you are an independent landlord or manage a real estate business with multiple collaborators, MRE supports collaboration and facilitates task coordination within teams.
+- **Custom Document Generation**: Create custom documents for effective communication with tenants. Personalized letters, notices, and announcements can be generated to ensure clear and consistent correspondence.
+
+- **Collaboration**: Whether you are an independent landlord or manage a real estate business with multiple collaborators, supports collaboration and facilitates task coordination within teams.
+
+### Enhanced Features (Asset-Premises)
+
+- **🔧 Warranty Management System**: Track warranties for appliances, systems, and structural components across all properties. Monitor expiration dates and coverage details to avoid unnecessary expenses.
+
+- **👥 Property Manager Role**: Assign specific properties to property managers with role-based access control. Managers only see and manage their assigned properties, ensuring proper data segregation.
+
+## Documentation
+
+- **[Feature Documentation](./documentation/FEATURES.md)** - Comprehensive guide to warranty management and property manager roles
+- **[API Documentation](./documentation/API.md)** - Complete API reference with examples
+- **[Deployment Guide](./documentation/DEPLOYMENT.md)** - Step-by-step deployment instructions
+- **[Developer Guide](./documentation/DEVELOPER.md)** - Development setup and contribution guidelines
 
 ## Screenshots
 
